@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@rightscale.com'
 license          'Apache 2.0'
 description      'Installs/Configures Jenkins'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '13.7.0'
+version          '13.7.1'
 
 supports "centos"
 supports "redhat"
@@ -107,6 +107,14 @@ attribute "rs-jenkins/slave/executors",
   :recipes => ["rs-jenkins::do_attach_request", "rs-jenkins::do_attach_slave_at_boot"]
 
 # Attributes shared between master and slave
+
+attribute "rs-jenkins/server/home",
+  :display_name => "Jenkins Home dir",
+  :description =>
+    "Directory to which Jenkins job and configuration data will be stored.",
+  :required => "optional",
+  :default => "/var/lib/jenkins",
+  :recipes => ["rs-jenkins::install_server"]
 
 attribute "rs-jenkins/public_key",
   :display_name => "Jenkins Public Key",
