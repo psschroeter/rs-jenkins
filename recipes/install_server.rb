@@ -122,49 +122,6 @@ directory "/var/log/jenkins" do
   group node[:'rs-jenkins'][:server][:system_group]
 end
 
-# Create the Jenkins user directory
-directory "#{node[:'rs-jenkins'][:server][:home]}/users/" +
-  "#{node[:'rs-jenkins'][:server][:user_name]}" do
-  recursive true
-  mode 0755
-  owner node[:'rs-jenkins'][:server][:system_user]
-  group node[:'rs-jenkins'][:server][:system_group]
-end
-
-# Create the Jenkins configuration file to include matrix based security
-template "#{node[:'rs-jenkins'][:server][:home]}/config.xml" do
-  source "jenkins_config.xml.erb"
-  mode 0644
-  owner node[:'rs-jenkins'][:server][:system_user]
-  group node[:'rs-jenkins'][:server][:system_group]
-  variables(
-    :user => node[:'rs-jenkins'][:server][:user_name]
-  )
-end
-
-
-# Obtain the hash of the password.
-chef_gem "bcrypt-ruby"
-
-require "bcrypt"
-node[:'rs-jenkins'][:server][:password_encrypted] = ::BCrypt::Password.create(
-  node[:'rs-jenkins'][:server][:password]
-)
-
-# Create Jenkins user configuration file.
-template "#{node[:'rs-jenkins'][:server][:home]}/users/" +
-  "#{node[:'rs-jenkins'][:server][:user_name]}/config.xml" do
-  source "jenkins_user_config.xml.erb"
-  mode 0644
-  owner node[:'rs-jenkins'][:server][:system_user]
-  group node[:'rs-jenkins'][:server][:system_group]
-  variables(
-    :user_full_name => node[:'rs-jenkins'][:server][:user_full_name],
-    :password_encrypted => node[:'rs-jenkins'][:server][:password_encrypted],
-    :email => node[:'rs-jenkins'][:server][:user_email]
-  )
-end
-
 service "jenkins" do
   action :start
 end

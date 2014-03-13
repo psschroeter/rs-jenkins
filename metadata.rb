@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@rightscale.com'
 license          'Apache 2.0'
 description      'Installs/Configures Jenkins'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '13.7.1'
+version          '13.8.0'
 
 supports "centos"
 supports "redhat"
@@ -18,6 +18,8 @@ recipe "rs-jenkins::default",
   "Install the dependencies for jenkins."
 recipe "rs-jenkins::install_server",
   "Install Jenkins server and configure it using the inputs provided."
+recipe "rs-jenkins::setup_users",
+  "Add the administrator user."
 recipe "rs-jenkins::do_attach_request",
   "Attach a slave node to the master Jenkins server."
 recipe "rs-jenkins::do_attach_slave_at_boot",
@@ -33,7 +35,7 @@ attribute "rs-jenkins/server/user_name",
   :required => "required",
   :recipes => [
     "rs-jenkins::default",
-    "rs-jenkins::install_server",
+    "rs-jenkins::setup_users",
     "rs-jenkins::do_attach_request",
     "rs-jenkins::do_attach_slave_at_boot"
   ]
@@ -43,14 +45,14 @@ attribute "rs-jenkins/server/user_email",
   :description =>
     "Default user's email.",
   :required => "required",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::install_server"]
+  :recipes => ["rs-jenkins::default", "rs-jenkins::setup_users"]
 
 attribute "rs-jenkins/server/user_full_name",
   :display_name => "Jenkins User Full Name",
   :description =>
     "Default user's full name.",
   :required => "required",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::install_server"]
+  :recipes => ["rs-jenkins::default", "rs-jenkins::setup_users"]
 
 attribute "rs-jenkins/server/password",
   :display_name => "Jenkins Password",
@@ -59,7 +61,7 @@ attribute "rs-jenkins/server/password",
   :required => "required",
   :recipes => [
     "rs-jenkins::default",
-    "rs-jenkins::install_server",
+    "rs-jenkins::setup_users",
     "rs-jenkins::do_attach_request",
     "rs-jenkins::do_attach_slave_at_boot"
   ]
