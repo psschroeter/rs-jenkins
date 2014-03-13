@@ -34,7 +34,6 @@ attribute "rs-jenkins/server/user_name",
     "Default user's sign in name.",
   :required => "required",
   :recipes => [
-    "rs-jenkins::default",
     "rs-jenkins::setup_users",
     "rs-jenkins::do_attach_request",
     "rs-jenkins::do_attach_slave_at_boot"
@@ -45,14 +44,14 @@ attribute "rs-jenkins/server/user_email",
   :description =>
     "Default user's email.",
   :required => "required",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::setup_users"]
+  :recipes => ["rs-jenkins::setup_users"]
 
 attribute "rs-jenkins/server/user_full_name",
   :display_name => "Jenkins User Full Name",
   :description =>
     "Default user's full name.",
   :required => "required",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::setup_users"]
+  :recipes => ["rs-jenkins::setup_users"]
 
 attribute "rs-jenkins/server/password",
   :display_name => "Jenkins Password",
@@ -60,7 +59,6 @@ attribute "rs-jenkins/server/password",
     "Default user's password.",
   :required => "required",
   :recipes => [
-    "rs-jenkins::default",
     "rs-jenkins::setup_users",
     "rs-jenkins::do_attach_request",
     "rs-jenkins::do_attach_slave_at_boot"
@@ -72,14 +70,14 @@ attribute "rs-jenkins/server/version",
     "Jenkins version to install. Leave it blank to get the latest version." +
     " Example: 1.500",
   :required => "optional",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::install_server"]
+  :recipes => ["rs-jenkins::install_server"]
 
 attribute "rs-jenkins/server/plugins",
   :display_name => "Jenkins Plugins",
   :description =>
     "Jenkins plugins to install.",
   :required => "optional",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::install_server"]
+  :recipes => ["rs-jenkins::install_server"]
 
 # Slave Attributes
 
@@ -132,7 +130,7 @@ attribute "rs-jenkins/private_key",
     "This key is used by Jenkins server/master to connect to the slave" +
     " using SSH.",
   :required => "required",
-  :recipes => ["rs-jenkins::default", "rs-jenkins::install_server"]
+  :recipes => ["rs-jenkins::do_attach_request", "rs-jenkins::do_attach_slave_at_boot", "rs-jenkins::install_server"]
 
 attribute "rs-jenkins/attach_slave_at_boot",
   :display_name => "Attach Jenkins Slave At Boot",
@@ -141,4 +139,4 @@ attribute "rs-jenkins/attach_slave_at_boot",
     " connected as a slave to the Jenkins server/master at boot.",
   :default => "false",
   :choice => ["true", "false"],
-  :recipes => ["rs-jenkins::do_attach_slave_at_boot"]
+  :recipes => ["rs-jenkins::do_attach_request", "rs-jenkins::do_attach_slave_at_boot"]
